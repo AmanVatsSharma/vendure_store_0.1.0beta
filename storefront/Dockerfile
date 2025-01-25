@@ -13,7 +13,7 @@ RUN apk add --no-cache libc6-compat
 USER node
 
 # Install dependencies based on the preferred package manager
-COPY --chown=node:node package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
+COPY --chown=node:node package.json package-lock.json* ./
 RUN npm ci --prefer-offline
 
 # 2. Rebuild the source code only when needed
@@ -22,10 +22,10 @@ FROM base AS builder
 COPY --from=deps --chown=node:node /home/node/node_modules ./node_modules
 COPY --chown=node:node . .
 
-RUN yarn build \
-    && rm -r .next/standalone/node_modules \
-    && rm -r node_modules \
-    && npm ci --omit-dev --prefer-offline
+RUN npm run build && \
+    rm -rf .next/standalone/node_modules && \
+    rm -rf node_modules && \
+    npm ci --omit=dev --prefer-offline
 
 # 3. Production image, copy all the files and run next
 FROM base AS runner
