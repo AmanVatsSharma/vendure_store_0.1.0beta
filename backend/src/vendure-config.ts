@@ -20,7 +20,16 @@ export const config: VendureConfig = {
         // The following options are useful in development mode,
         // but are best turned off for production for security
         // reasons.
-        ...(IS_DEV ? {
+        // ...(IS_DEV ? {
+        //     adminApiPlayground: {
+        //         settings: { 'request.credentials': 'include' } as any,
+        //     },
+        //     adminApiDebug: true,
+        //     shopApiPlayground: {
+        //         settings: { 'request.credentials': 'include' } as any,
+        //     },
+        //     shopApiDebug: true,
+        // } : {}),
             adminApiPlayground: {
                 settings: { 'request.credentials': 'include' } as any,
             },
@@ -29,7 +38,6 @@ export const config: VendureConfig = {
                 settings: { 'request.credentials': 'include' } as any,
             },
             shopApiDebug: true,
-        } : {}),
     },
     authOptions: {
         tokenMethod: ['bearer', 'cookie'],
