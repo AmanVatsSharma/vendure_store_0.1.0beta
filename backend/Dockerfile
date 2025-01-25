@@ -5,18 +5,18 @@ WORKDIR /app
 # Install PostgreSQL client and other dependencies
 RUN apk add --no-cache postgresql-client
 
-# Copy package files
-COPY package*.json ./
+# Install production dependencies and concurrently
+COPY package.json ./
+RUN npm install --production pg
+RUN npm install concurrently
 
-# Install all dependencies (including dev dependencies)
-RUN npm install
+# Copy pre-built files and necessary assets
+COPY dist ./dist
+COPY static ./static
 
-# Copy source code
-COPY . .
-
-ENV NODE_ENV=development
+ENV NODE_ENV=production
 ENV PORT=3000
 EXPOSE 3000
 
-# Start in development mode
-CMD ["npm", "run", "dev"]
+# Start both server and worker processes using concurrently
+CMD ["npm", "run", "start"]
