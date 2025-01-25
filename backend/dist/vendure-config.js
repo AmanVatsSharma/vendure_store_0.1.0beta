@@ -2,6 +2,7 @@
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.config = void 0;
 const core_1 = require("@vendure/core");
@@ -42,13 +43,22 @@ exports.config = {
         },
     },
     dbConnectionOptions: {
-        type: 'better-sqlite3',
+        type: 'postgres',
         // See the README.md "Migrations" section for an explanation of
         // the `synchronize` and `migrations` options.
         synchronize: false,
-        migrations: [path_1.default.join(__dirname, './migrations/*.+(js|ts)')],
+        migrations: [path_1.default.join(__dirname, './migrations/*.+(ts|js)')],
         logging: false,
-        database: path_1.default.join(__dirname, '../vendure.sqlite'),
+        database: process.env.DB_NAME,
+        schema: process.env.DB_SCHEMA,
+        host: process.env.DB_HOST,
+        url: process.env.DB_URL,
+        port: +((_a = process.env.DB_PORT) !== null && _a !== void 0 ? _a : 5432),
+        username: process.env.DB_USERNAME,
+        password: process.env.DB_PASSWORD,
+        ssl: process.env.DB_CA_CERT ? {
+            ca: process.env.DB_CA_CERT,
+        } : undefined,
     },
     paymentOptions: {
         paymentMethodHandlers: [core_1.dummyPaymentHandler],
