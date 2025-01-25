@@ -9,8 +9,6 @@ RUN npm install --production
 # Copy pre-built files and necessary assets
 COPY dist ./dist
 COPY static ./static
-COPY migration.json ./
-COPY schema.graphql ./
 
 ENV NODE_ENV=production
 ENV PORT=3000
