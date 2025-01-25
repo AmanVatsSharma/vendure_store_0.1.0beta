@@ -3,7 +3,7 @@ import { i18n } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import resources from '@/src/@types/resources';
 import { GetServerSidePropsContext } from 'next';
-import { channels } from './consts';
+import { channels, DEFAULT_CHANNEL_SLUG, DEFAULT_LOCALE } from './consts';
 import { getContext } from './utils';
 
 export interface ContextModel<T = Record<string, string>> {
@@ -11,19 +11,27 @@ export interface ContextModel<T = Record<string, string>> {
 }
 
 export const getAllPossibleWithChannels = () => {
-    const paths: { params: { locale: string; channel: string } }[] = [];
-    channels.forEach(c => {
-        if (c.locales.length === 0) {
+    try {
+        const paths: { params: { locale: string; channel: string } }[] = [];
+        channels.forEach(c => {
+            // Always add the default path first
             paths.push({ params: { channel: c.slug, locale: c.nationalLocale } });
-        } else {
-            c.locales
-                .filter(l => l !== c.nationalLocale)
-                .forEach(locale => {
-                    paths.push({ params: { channel: c.slug, locale } });
-                });
-        }
-    });
-    return paths;
+            
+            // Then add other locales if they exist
+            if (c.locales.length > 0) {
+                c.locales
+                    .filter(l => l !== c.nationalLocale)
+                    .forEach(locale => {
+                        paths.push({ params: { channel: c.slug, locale } });
+                    });
+            }
+        });
+        return paths;
+    } catch (error) {
+        console.warn('Error generating paths:', error);
+        // Return at least the default path
+        return [{ params: { channel: DEFAULT_CHANNEL_SLUG, locale: DEFAULT_LOCALE } }];
+    }
 };
 
 const getStandardLocalePaths = () => {
@@ -35,48 +43,74 @@ export const localizeGetStaticPaths = <T>(
         params: T;
     }>,
 ) => {
-    const allPaths = getAllPossibleWithChannels();
-    const paths = allPaths.flatMap(locale =>
-        existingPaths.map(ep => ({
-            ...ep,
-            params: { ...ep.params, ...locale.params },
-        })),
-    );
-    return paths;
+    try {
+        const allPaths = getAllPossibleWithChannels();
+        const paths = allPaths.flatMap(locale =>
+            existingPaths.map(ep => ({
+                ...ep,
+                params: { ...ep.params, ...locale.params },
+            })),
+        );
+        return paths;
+    } catch (error) {
+        console.warn('Error localizing paths:', error);
+        return existingPaths;
+    }
 };
 
 export async function getI18nProps(ctx: ContextModel, ns: Array<keyof typeof resources> = ['common']) {
-    const locale = ctx?.params?.locale;
-    if (process.env.NODE_ENV === 'development') await i18n?.reloadResources();
+    try {
+        const locale = ctx?.params?.locale || DEFAULT_LOCALE;
+        if (process.env.NODE_ENV === 'development') await i18n?.reloadResources();
 
-    const props = {
-        ...(await serverSideTranslations(locale, ns)),
-    };
+        const props = {
+            ...(await serverSideTranslations(locale, ns)),
+        };
 
-    return props;
+        return props;
+    } catch (error) {
+        console.warn('Error getting i18n props:', error);
+        return {};
+    }
 }
 
 export function makeStaticProps(ns: Array<keyof typeof resources>) {
     return async function getStaticProps(ctx: ContextModel) {
-        const context = getContext(ctx);
-        return {
-            props: await getI18nProps(context, ns),
-            context: context.params,
-        };
+        try {
+            const context = getContext(ctx);
+            return {
+                props: await getI18nProps(context, ns),
+                context: context.params,
+            };
+        } catch (error) {
+            console.warn('Error in static props:', error);
+            return {
+                props: {},
+                context: ctx.params,
+            };
+        }
     };
 }
 
 export function makeServerSideProps(ns: Array<keyof typeof resources>) {
     return async function getServerSideProps(ctx: GetServerSidePropsContext) {
-        const context = getContext(ctx);
-        return {
-            props: await getI18nProps(context, ns),
-            context: context.params,
-        };
+        try {
+            const context = getContext(ctx);
+            return {
+                props: await getI18nProps(context, ns),
+                context: context.params,
+            };
+        } catch (error) {
+            console.warn('Error in server props:', error);
+            return {
+                props: {},
+                context: {},
+            };
+        }
     };
 }
 
 export const getStaticPaths = () => ({
-    fallback: false,
+    fallback: 'blocking',
     paths: getStandardLocalePaths(),
 });
