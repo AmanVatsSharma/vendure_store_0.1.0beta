@@ -4,27 +4,21 @@ import { DEFAULT_CHANNEL, channels } from '@/src/lib/consts';
 import { getAllPossibleWithChannels } from '@/src/lib/getStatic';
 
 export const getStaticPaths = async () => {
-    try {
-        const allPaths = getAllPossibleWithChannels();
-        const resp = await Promise.all(
-            allPaths.map(async path => {
-                const channel = channels.find(c => c.slug === path.params.channel)?.channel ?? DEFAULT_CHANNEL;
-                const { products } = await SSGQuery({ channel, locale: path.params.locale })({
-                    products: [{}, { items: ProductSlugSelector }],
-                });
-                return { ...products, ...path.params };
-            }),
-        );
-        const paths = resp.flatMap(data =>
-            data.items.map(item => {
-                return { params: { ...data, slug: item.slug } };
-            }),
-        );
+    const allPaths = getAllPossibleWithChannels();
+    const resp = await Promise.all(
+        allPaths.map(async path => {
+            const channel = channels.find(c => c.slug === path.params.channel)?.channel ?? DEFAULT_CHANNEL;
+            const { products } = await SSGQuery({ channel, locale: path.params.locale })({
+                products: [{}, { items: ProductSlugSelector }],
+            });
+            return { ...products, ...path.params };
+        }),
+    );
+    const paths = resp.flatMap(data =>
+        data.items.map(item => {
+            return { params: { ...data, slug: item.slug } };
+        }),
+    );
 
-        return { paths, fallback: 'blocking' };
-    } catch (error) {
-        // If we can't fetch paths during build time, return empty paths and use fallback
-        console.warn('Failed to fetch static paths, will generate on demand:', error);
-        return { paths: [], fallback: 'blocking' };
-    }
+    return { paths, fallback: false };
 };

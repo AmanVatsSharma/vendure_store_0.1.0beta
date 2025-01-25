@@ -20,12 +20,17 @@ export const DEFAULT_CHANNEL_SLUG = 'en';
 export const DEFAULT_LOCALE = 'en';
 export const DEFAULT_NATIONAL_LOCALE = 'en';
 
-// Basic channel configuration that doesn't require backend during build
 export const channels = [
     {
         slug: DEFAULT_CHANNEL_SLUG,
         channel: DEFAULT_CHANNEL,
         nationalLocale: DEFAULT_NATIONAL_LOCALE,
-        locales: ['en'],
-    }
+        locales: ['en', 'pl', 'fr', 'de', 'ja', 'es'],
+    },
+    // {
+    //     slug: 'pl',
+    //     channel: 'pl-channel',
+    //     nationalLocale: 'pl',
+    //     locales: ['pl', 'en'],
+    // },
 ];
