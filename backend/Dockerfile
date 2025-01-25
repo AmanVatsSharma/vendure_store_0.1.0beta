@@ -1,36 +1,20 @@
-FROM node:20
+FROM node:20-alpine
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
-# Install build dependencies
-RUN apt-get update && apt-get install -y \
-    python3 \
-    make \
-    g++ \
-    unzip \
-    curl \
-    && rm -rf /var/lib/apt/lists/*
-
-# Optional: Install Bun if necessary
-# If not using Bun, you can comment out or remove these lines
- RUN curl -fsSL https://bun.sh/install | bash
-
-# Copy package files and install dependencies
+# Install only production dependencies
 COPY package.json ./
-COPY bun.lock ./
-RUN npm install
+RUN npm install --production
 
-# Copy the rest of the application code
-COPY . .
+# Copy pre-built files and necessary assets
+COPY dist ./dist
+COPY static ./static
+COPY migration.json ./
+COPY schema.graphql ./
 
-# Build the TypeScript sources
-RUN npm run build
-
-# Set the PORT environment variable based on Railway's requirements
+ENV NODE_ENV=production
 ENV PORT=3000
-
-# Expose the port Vendure will run on
 EXPOSE 3000
 
 # Start the Vendure server
-CMD ["npm", "run", "start"]
+CMD ["npm", "run", "start:prod"]
