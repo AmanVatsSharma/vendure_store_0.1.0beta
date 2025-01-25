@@ -10,6 +10,11 @@ export interface ContextModel<T = Record<string, string>> {
     params: { locale: string; channel: string } & T;
 }
 
+export interface StaticPropsContext {
+    locale: string;
+    channel: string;
+}
+
 export const getAllPossibleWithChannels = () => {
     try {
         const paths: { params: { locale: string; channel: string } }[] = [];
@@ -78,15 +83,22 @@ export function makeStaticProps(ns: Array<keyof typeof resources>) {
     return async function getStaticProps(ctx: ContextModel) {
         try {
             const context = getContext(ctx);
+            const i18nProps = await getI18nProps(context, ns);
             return {
-                props: await getI18nProps(context, ns),
-                context: context.params,
+                props: i18nProps,
+                context: {
+                    locale: context.params.locale || DEFAULT_LOCALE,
+                    channel: context.params.channel || DEFAULT_CHANNEL_SLUG,
+                } as StaticPropsContext,
             };
         } catch (error) {
             console.warn('Error in static props:', error);
             return {
                 props: {},
-                context: ctx.params,
+                context: {
+                    locale: DEFAULT_LOCALE,
+                    channel: DEFAULT_CHANNEL_SLUG,
+                } as StaticPropsContext,
             };
         }
     };
@@ -96,15 +108,22 @@ export function makeServerSideProps(ns: Array<keyof typeof resources>) {
     return async function getServerSideProps(ctx: GetServerSidePropsContext) {
         try {
             const context = getContext(ctx);
+            const i18nProps = await getI18nProps(context, ns);
             return {
-                props: await getI18nProps(context, ns),
-                context: context.params,
+                props: i18nProps,
+                context: {
+                    locale: context.params?.locale || DEFAULT_LOCALE,
+                    channel: context.params?.channel || DEFAULT_CHANNEL_SLUG,
+                } as StaticPropsContext,
             };
         } catch (error) {
             console.warn('Error in server props:', error);
             return {
                 props: {},
-                context: {},
+                context: {
+                    locale: DEFAULT_LOCALE,
+                    channel: DEFAULT_CHANNEL_SLUG,
+                } as StaticPropsContext,
             };
         }
     };

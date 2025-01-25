@@ -1,7 +1,7 @@
 import { SSRQuery } from '@/src/graphql/client';
 import { OrderSelector } from '@/src/graphql/selectors';
 import { getCollections } from '@/src/graphql/sharedQueries';
-import { makeServerSideProps } from '@/src/lib/getStatic';
+import { makeServerSideProps, StaticPropsContext } from '@/src/lib/getStatic';
 import { prepareSSRRedirect, redirectFromDefaultChannelSSR } from '@/src/lib/redirect';
 import { arrayToTree } from '@/src/util/arrayToTree';
 import { GetServerSidePropsContext } from 'next';
@@ -13,7 +13,12 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
     const homePageRedirect = prepareSSRRedirect('/')(context);
     const api = SSRQuery(context);
 
-    const collections = await getCollections(r.context);
+    // Ensure we have a valid context before proceeding
+    if (!r.context || !r.context.locale || !r.context.channel) {
+        return homePageRedirect;
+    }
+
+    const collections = await getCollections(r.context as StaticPropsContext);
     const navigation = arrayToTree(collections);
     const code = context.params?.code as string;
     if (!code) return homePageRedirect;
