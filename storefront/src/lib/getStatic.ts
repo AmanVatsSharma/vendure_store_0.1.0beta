@@ -18,24 +18,22 @@ export interface StaticPropsContext {
 export const getAllPossibleWithChannels = () => {
     try {
         const paths: { params: { locale: string; channel: string } }[] = [];
-        channels.forEach(c => {
-            // Always add the default path first
-            paths.push({ params: { channel: c.slug, locale: c.nationalLocale } });
-            
-            // Then add other locales if they exist
-            if (c.locales.length > 0) {
-                c.locales
-                    .filter(l => l !== c.nationalLocale)
-                    .forEach(locale => {
-                        paths.push({ params: { channel: c.slug, locale } });
-                    });
-            }
+        // For build time, we only generate the default path
+        paths.push({ 
+            params: { 
+                channel: DEFAULT_CHANNEL_SLUG, 
+                locale: DEFAULT_LOCALE 
+            } 
         });
         return paths;
     } catch (error) {
         console.warn('Error generating paths:', error);
-        // Return at least the default path
-        return [{ params: { channel: DEFAULT_CHANNEL_SLUG, locale: DEFAULT_LOCALE } }];
+        return [{ 
+            params: { 
+                channel: DEFAULT_CHANNEL_SLUG, 
+                locale: DEFAULT_LOCALE 
+            } 
+        }];
     }
 };
 
@@ -50,28 +48,24 @@ export const localizeGetStaticPaths = <T>(
 ) => {
     try {
         const allPaths = getAllPossibleWithChannels();
-        const paths = allPaths.flatMap(locale =>
-            existingPaths.map(ep => ({
-                ...ep,
-                params: { ...ep.params, ...locale.params },
-            })),
-        );
-        return paths;
+        return allPaths;
     } catch (error) {
         console.warn('Error localizing paths:', error);
-        return existingPaths;
+        return [{ 
+            params: { 
+                channel: DEFAULT_CHANNEL_SLUG, 
+                locale: DEFAULT_LOCALE 
+            } 
+        }];
     }
 };
 
 export async function getI18nProps(ctx: ContextModel, ns: Array<keyof typeof resources> = ['common']) {
     try {
         const locale = ctx?.params?.locale || DEFAULT_LOCALE;
-        if (process.env.NODE_ENV === 'development') await i18n?.reloadResources();
-
         const props = {
             ...(await serverSideTranslations(locale, ns)),
         };
-
         return props;
     } catch (error) {
         console.warn('Error getting i18n props:', error);
@@ -87,9 +81,10 @@ export function makeStaticProps(ns: Array<keyof typeof resources>) {
             return {
                 props: i18nProps,
                 context: {
-                    locale: context.params.locale || DEFAULT_LOCALE,
-                    channel: context.params.channel || DEFAULT_CHANNEL_SLUG,
+                    locale: DEFAULT_LOCALE,
+                    channel: DEFAULT_CHANNEL_SLUG,
                 } as StaticPropsContext,
+                revalidate: 60, // Revalidate every minute
             };
         } catch (error) {
             console.warn('Error in static props:', error);
@@ -99,6 +94,7 @@ export function makeStaticProps(ns: Array<keyof typeof resources>) {
                     locale: DEFAULT_LOCALE,
                     channel: DEFAULT_CHANNEL_SLUG,
                 } as StaticPropsContext,
+                revalidate: 60,
             };
         }
     };
@@ -130,6 +126,6 @@ export function makeServerSideProps(ns: Array<keyof typeof resources>) {
 }
 
 export const getStaticPaths = () => ({
-    fallback: 'blocking',
-    paths: getStandardLocalePaths(),
+    fallback: true, // Changed to true to allow dynamic generation
+    paths: [], // Generate no pages at build time
 });
