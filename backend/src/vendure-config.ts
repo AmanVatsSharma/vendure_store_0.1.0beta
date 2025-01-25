@@ -43,13 +43,22 @@ export const config: VendureConfig = {
         },
     },
     dbConnectionOptions: {
-        type: 'better-sqlite3',
+        type: 'postgres',
         // See the README.md "Migrations" section for an explanation of
         // the `synchronize` and `migrations` options.
         synchronize: false,
-        migrations: [path.join(__dirname, './migrations/*.+(js|ts)')],
+        migrations: [path.join(__dirname, './migrations/*.+(ts|js)')],
         logging: false,
-        database: path.join(__dirname, '../vendure.sqlite'),
+        database: process.env.DB_NAME,
+        schema: process.env.DB_SCHEMA,
+        host: process.env.DB_HOST,
+        url: process.env.DB_URL,
+        port: +process.env.DB_PORT,
+        username: process.env.DB_USERNAME,
+        password: process.env.DB_PASSWORD,
+        ssl: process.env.DB_CA_CERT ? {
+            ca: process.env.DB_CA_CERT,
+        } : undefined,
     },
     paymentOptions: {
         paymentMethodHandlers: [dummyPaymentHandler],
@@ -61,26 +70,21 @@ export const config: VendureConfig = {
         AssetServerPlugin.init({
             route: 'assets',
             assetUploadDir: path.join(__dirname, '../static/assets'),
-            // For local dev, the correct value for assetUrlPrefix should
-            // be guessed correctly, but for production it will usually need
-            // to be set manually to match your production url.
-            assetUrlPrefix: IS_DEV ? undefined : 'https://www.my-shop.com/assets/',
+            assetUrlPrefix: IS_DEV ? undefined : process.env.ASSET_URL_PREFIX,
         }),
         DefaultJobQueuePlugin.init({ useDatabaseForBuffer: true }),
         DefaultSearchPlugin.init({ bufferUpdates: false, indexStockStatus: true }),
         EmailPlugin.init({
-            devMode: true,
+            devMode: IS_DEV,
             outputPath: path.join(__dirname, '../static/email/test-emails'),
             route: 'mailbox',
             handlers: defaultEmailHandlers,
             templateLoader: new FileBasedTemplateLoader(path.join(__dirname, '../static/email/templates')),
             globalTemplateVars: {
-                // The following variables will change depending on your storefront implementation.
-                // Here we are assuming a storefront running at http://localhost:8080.
-                fromAddress: '"example" <noreply@example.com>',
-                verifyEmailAddressUrl: 'http://localhost:8080/verify',
-                passwordResetUrl: 'http://localhost:8080/password-reset',
-                changeEmailAddressUrl: 'http://localhost:8080/verify-email-address-change'
+                fromAddress: process.env.EMAIL_FROM || '"example" <noreply@example.com>',
+                verifyEmailAddressUrl: process.env.VERIFY_EMAIL_URL || 'http://localhost:8080/verify',
+                passwordResetUrl: process.env.PASSWORD_RESET_URL || 'http://localhost:8080/password-reset',
+                changeEmailAddressUrl: process.env.CHANGE_EMAIL_URL || 'http://localhost:8080/verify-email-address-change'
             },
         }),
         AdminUiPlugin.init({
