@@ -12,10 +12,9 @@ const admin_ui_plugin_1 = require("@vendure/admin-ui-plugin");
 require("dotenv/config");
 const path_1 = __importDefault(require("path"));
 const IS_DEV = process.env.APP_ENV === 'dev';
-const serverPort = +process.env.PORT || 3000;
 exports.config = {
     apiOptions: {
-        port: serverPort,
+        port: +(process.env.PORT || 3000),
         adminApiPath: 'admin-api',
         shopApiPath: 'shop-api',
         // The following options are useful in development mode,
@@ -65,15 +64,34 @@ exports.config = {
     },
     // When adding or altering custom field definitions, the database will
     // need to be updated. See the "Migrations" section in README.md.
-    customFields: {},
+    customFields: {
+        Product: [{
+                name: 'test',
+                type: 'string',
+            }]
+    },
     plugins: [
         asset_server_plugin_1.AssetServerPlugin.init({
             route: 'assets',
-            assetUploadDir: path_1.default.join(__dirname, '../static/assets'),
-            // For local dev, the correct value for assetUrlPrefix should
-            // be guessed correctly, but for production it will usually need
-            // to be set manually to match your production url.
-            assetUrlPrefix: IS_DEV ? undefined : 'https://www.my-shop.com/assets/',
+            assetUploadDir: process.env.ASSET_UPLOAD_DIR || path_1.default.join(__dirname, '../static/assets'),
+            // If the MINIO_ENDPOINT environment variable is set, we'll use
+            // Minio as the asset storage provider. Otherwise, we'll use the
+            // default local provider.
+            storageStrategyFactory: process.env.MINIO_ENDPOINT ? (0, asset_server_plugin_1.configureS3AssetStorage)({
+                bucket: 'vendure-assets',
+                credentials: {
+                    accessKeyId: process.env.MINIO_ACCESS_KEY,
+                    secretAccessKey: process.env.MINIO_SECRET_KEY,
+                },
+                nativeS3Configuration: {
+                    endpoint: process.env.MINIO_ENDPOINT,
+                    forcePathStyle: true,
+                    signatureVersion: 'v4',
+                    // The `region` is required by the AWS SDK even when using MinIO,
+                    // so we just use a dummy value here.
+                    region: 'eu-west-1',
+                },
+            }) : undefined,
         }),
         core_1.DefaultJobQueuePlugin.init({ useDatabaseForBuffer: true }),
         core_1.DefaultSearchPlugin.init({ bufferUpdates: false, indexStockStatus: true }),
@@ -82,7 +100,7 @@ exports.config = {
             outputPath: path_1.default.join(__dirname, '../static/email/test-emails'),
             route: 'mailbox',
             handlers: email_plugin_1.defaultEmailHandlers,
-            templateLoader: new email_plugin_1.FileBasedTemplateLoader(path_1.default.join(__dirname, '../static/email/templates')),
+            templatePath: path_1.default.join(__dirname, '../static/email/templates'),
             globalTemplateVars: {
                 // The following variables will change depending on your storefront implementation.
                 // Here we are assuming a storefront running at http://localhost:8080.
@@ -94,10 +112,7 @@ exports.config = {
         }),
         admin_ui_plugin_1.AdminUiPlugin.init({
             route: 'admin',
-            port: serverPort + 2,
-            adminUiConfig: {
-                apiPort: serverPort,
-            },
+            port: 3002,
         }),
     ],
 };
