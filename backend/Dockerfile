@@ -1,9 +1,11 @@
-FROM node:20
+FROM oven/bun:1
 
 WORKDIR /usr/src/app
 
 COPY package.json ./
-COPY package-lock.json ./
-RUN npm install --production
+COPY bun.lock ./
+RUN bun install --production
 COPY . .
-RUN npm run build
+RUN bun run build
+
+CMD ["bun", "run", "start"]
