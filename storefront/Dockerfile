@@ -3,14 +3,13 @@ FROM node:$NODE_VER-alpine AS base
 
 WORKDIR /app
 
-# Install dependencies only
+# Install dependencies
 COPY package.json package-lock.json* ./
-RUN npm ci --production
+RUN npm ci --production --ignore-scripts
 
 # Copy pre-built files
 COPY .next ./.next
 COPY public ./public
-COPY node_modules ./node_modules
 
 ENV NODE_ENV=production
 ENV PORT=3000
