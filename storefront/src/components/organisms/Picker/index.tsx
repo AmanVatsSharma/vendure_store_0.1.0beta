@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from '@emotion/styled';
 import { Stack, TP } from '@/src/components';
-import { LogoAexol } from '@/src/assets';
+import { LogoProMerchants } from '@/src/assets';
 import { XIcon } from 'lucide-react';
 import { Dropdown } from './Dropdown';
 import { Trans, useTranslation } from 'next-i18next';
@@ -147,7 +147,7 @@ export const Picker: React.FC<{
                             <XIcon />
                         </IconWrapper>
                         <Header gap="2rem" column itemsCenter>
-                            <LogoAexol />
+                            <LogoProMerchants />
                             {changeModal?.modal ? (
                                 <TP>
                                     <Trans

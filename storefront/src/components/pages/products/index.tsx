@@ -20,6 +20,7 @@ import { ProductDescription } from '@/src/components/molecules/ProductDescriptio
 import { storefrontApiQuery } from '@/src/graphql/client';
 import { useChannels } from '@/src/state/channels';
 import { ProductVariantTileType, productVariantTileSelector } from '@/src/graphql/selectors';
+import SafeHtml from '@/src/components/common/SafeHtml';
 
 export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps>> = props => {
     const { t } = useTranslation('products');
@@ -182,9 +183,7 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
                                     {
                                         title: t('description'),
                                         children: (
-                                            <TP color="subtitle" style={{ marginTop: '1.5rem' }}>
-                                                {product?.description}
-                                            </TP>
+                                            <SafeHtml html={product?.description || ''} />
                                         ),
                                     },
                                 ]}

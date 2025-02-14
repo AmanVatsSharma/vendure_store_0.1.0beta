@@ -5,12 +5,12 @@ import { Link } from '@/src/components/atoms';
 import styled from '@emotion/styled';
 
 const socialHrefs = [
-    { href: 'https://www.facebook.com/Aexol', icon: <Facebook size="3rem" />, ariaLabel: 'Facebook' },
-    { href: 'https://twitter.com/aexol', icon: <Twitter size="3rem" />, ariaLabel: 'Twitter' },
-    { href: 'https://www.instagram.com/aexolofficial/', icon: <Instagram size="3rem" />, ariaLabel: 'Instagram' },
-    { href: 'https://www.youtube.com/@AEXOLAPPS', icon: <Youtube size="3rem" />, ariaLabel: 'Youtube' },
+    { href: 'https://www.facebook.com/ProMerchants', icon: <Facebook size="3rem" />, ariaLabel: 'Facebook' },
+    { href: 'https://twitter.com/ProMerchants', icon: <Twitter size="3rem" />, ariaLabel: 'Twitter' },
+    { href: 'https://www.instagram.com/ProMerchantsofficial/', icon: <Instagram size="3rem" />, ariaLabel: 'Instagram' },
+    { href: 'https://www.youtube.com/@ProMerchantsAPPS', icon: <Youtube size="3rem" />, ariaLabel: 'Youtube' },
     {
-        href: 'https://github.com/aexol-studio/vendure-nextjs-storefront',
+        href: 'https://github.com/ProMerchants-studio/vendure-nextjs-storefront',
         icon: <Github size="3rem" />,
         ariaLabel: 'Github',
     },

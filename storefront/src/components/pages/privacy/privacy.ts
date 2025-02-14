@@ -5,7 +5,7 @@ export const privacyContent = `
 
     <h1>Privacy Policy</h1>
 
-    <p>Protecting your privacy is really important to us. Accordingly, Aexol Sp. z o.o. provides this Privacy Policy to
+    <p>Protecting your privacy is really important to us. Accordingly, ProMerchants Sp. z o.o. provides this Privacy Policy to
         explain our practices regarding our collection, use and disclosure of Personal Data and other information that
         we receive.</p>
 
@@ -16,7 +16,7 @@ export const privacyContent = `
 
     <h2>Definitions</h2>
 
-    <p><strong>Controller/Aexol/We</strong> - means Aexol Sp. z o.o. a Polish company having a principal place of business
+    <p><strong>Controller/ProMerchants/We</strong> - means ProMerchants Sp. z o.o. a Polish company having a principal place of business
         at Mlawska 4/U7 street, 15-411 Białystok, Poland, which determines the purposes and means of the processing of
         Personal Data</p>
 
@@ -45,21 +45,21 @@ export const privacyContent = `
 
     <p><strong>Privacy Policy</strong> - this document</p>
 
-    <p><strong>Website</strong> - our website and its subpages: <a href="https://aexol.com/"
-            title="Aexol website">www.aexol.com</a></p>
+    <p><strong>Website</strong> - our website and its subpages: <a href="https://ProMerchants.com/"
+            title="ProMerchants website">www.ProMerchants.com</a></p>
 
     <p><strong>Service</strong> - The Controller's website that describes their services, allows you to contact them,
         provides information about other activities we organize or participate in, such as events, newsletters, etc.</p>
 
     <h2>Contact information</h2>
 
-    <p>The Controller of the Personal Data obtained from you is Aexol Sp. z o.o., a Polish company having a principal
+    <p>The Controller of the Personal Data obtained from you is ProMerchants Sp. z o.o., a Polish company having a principal
         place of business at Mlawska 4/U7, 15-411 Białystok, Poland registered in the National Court Register, under KRS
         number 0000602817, , Tax Identification Number (NIP): 5423253283, REGON 363749060.</p>
 
     <p>If you wish to contact us about any and all matters related to the processing of Personal Data and the exercise of
-        the rights attached to such processing, you can contact us via mail: Aexol Sp. z o.o., Mlawska 4/U7, 15-411
-        Białystok, Poland or e-mail: <a href="mailto:office@aexol.com">office@aexol.com</a></p>
+        the rights attached to such processing, you can contact us via mail: ProMerchants Sp. z o.o., Mlawska 4/U7, 15-411
+        Białystok, Poland or e-mail: <a href="mailto:office@ProMerchants.com">office@ProMerchants.com</a></p>
 
     <h2>How we use the information collected from you</h2>
 
@@ -223,13 +223,13 @@ export const privacyContent = `
         Data will be transferred to third countries. Due to the fact that the level of Personal Data protection outside
         the EEA differs from that provided by European law, the Controller undertakes to apply appropriate safeguards
         that, in accordance with EU law, legalize the transfer and provide adequate guarantees for the protection of your
-        Personal Data. The Personal Data that you provide will be maintained in a safe and secure manner. Aexol
-        databases and information are stored on secure servers with appropriate firewalls. Aexol uses
+        Personal Data. The Personal Data that you provide will be maintained in a safe and secure manner. ProMerchants
+        databases and information are stored on secure servers with appropriate firewalls. ProMerchants uses
         industry-standard physical, technical and administrative security measures to safeguard all Personal Data, keeping
         it confidential and secure. We conduct periodic reviews of our security measures pertaining to our Personal Data
         collection and storage, to guard against unauthorized access to our systems. When you enter Personal Data (such as
-        login credentials) in respect to your User Account ("User Information") all communications between Aexol
-        and the Users of Aexol Services are encrypted using Secure Socket Layer (SSL) Certificates. As a user of
+        login credentials) in respect to your User Account ("User Information") all communications between ProMerchants
+        and the Users of ProMerchants Services are encrypted using Secure Socket Layer (SSL) Certificates. As a user of
         the Services, You should use the Services responsibly and not share your User Information including your username
         or password or account information with anyone.</p>
 
@@ -279,7 +279,7 @@ export const privacyContent = `
         review this page for the latest information on our privacy practices.</p>
 
     <p>If you have any questions about this Privacy Policy, please contact us by email: <a
-            href="mailto:office@aexol.com">office@aexol.com</a></p>
+            href="mailto:office@ProMerchants.com">office@ProMerchants.com</a></p>
 
     <p>This Privacy Policy was last updated on: January 31, 2024.</p>
 

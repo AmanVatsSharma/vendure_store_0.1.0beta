@@ -1,7 +1,7 @@
 ### ![VENDURE NEXTJS STOREFRONT IDEA](https://github.com/user-attachments/assets/a909bfd1-17d7-447e-b216-c6c3f37c6536) ![Vector 902 (Stroke) (1)](https://github.com/user-attachments/assets/93e38773-7467-4374-a9e8-13387aa5b076#gh-dark-mode-only) ![Vector 902 (Stroke) (1)](https://github.com/user-attachments/assets/51b16a12-11c3-4b72-8f87-d78afdbe9c83#gh-light-mode-only)
 This is a NextJS starter for Vendure in the form of a demo e-commerce shop. 
 
-> The project is in its **alpha phase**! However, you can still read the concepts, run the storefront page locally, or check how it works at: [shop.aexol.com](https://shop.aexol.com).
+> The project is in its **alpha phase**! However, you can still read the concepts, run the storefront page locally, or check how it works at: [shop.ProMerchants.com](https://shop.ProMerchants.com).
 
 <br />
 
@@ -36,7 +36,7 @@ This is a NextJS starter for Vendure in the form of a demo e-commerce shop.
 **3.** Set up your Vendure server locally and run it on `http://localhost:3000/`. You can read more about how to set that up in the Vendure Server section below.
 
 #### VENDURE SERVER
-You need to have the Vendure store running locally to use this storefront. This storefront requires a Vendure V2 server. You can either run a local instance or use our public demo server. The demo of the Vendure server (MinIO & Postgres & SMTP) can be found [here](https://github.com/aexol-studio/aexol-shop-backend). Check it out to see all changes.
+You need to have the Vendure store running locally to use this storefront. This storefront requires a Vendure V2 server. You can either run a local instance or use our public demo server. The demo of the Vendure server (MinIO & Postgres & SMTP) can be found [here](https://github.com/ProMerchants-studio/ProMerchants-shop-backend). Check it out to see all changes.
 
 <br />
 

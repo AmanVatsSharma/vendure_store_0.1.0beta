@@ -12,7 +12,7 @@ import { RootNode } from '@/src/util/arrayToTree';
 import { useChannels } from '@/src/state/channels';
 import { channels } from '@/src/lib/consts';
 
-export const siteTitle = 'Aexol Next.js Storefront';
+export const siteTitle = 'ProMerchants Next.js Storefront';
 
 interface LayoutProps {
     pageTitle?: string;

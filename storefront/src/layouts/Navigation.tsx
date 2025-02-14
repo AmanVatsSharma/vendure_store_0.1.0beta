@@ -1,4 +1,4 @@
-import { LogoAexol } from '@/src/assets';
+import { LogoProMerchants } from '@/src/assets';
 import { ContentContainer } from '@/src/components/atoms';
 import { UserMenu } from '@/src/components/molecules/UserMenu';
 
@@ -21,7 +21,7 @@ import { CategoryBar } from './CategoryBar';
 import { NavigationSearch } from '@/src/components/organisms/NavgationSearch';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useNavigationSearch } from '@/src/components/organisms/NavgationSearch/hooks';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Picker } from '@/src/components/organisms/Picker';
 import { useTranslation } from 'next-i18next';
 
@@ -43,6 +43,7 @@ export const Navigation: React.FC<NavigationProps> = ({ navigation, categories, 
     const searchRef = useRef<HTMLDivElement>(null);
     const searchMobileRef = useRef<HTMLDivElement>(null);
     const iconRef = useRef<HTMLButtonElement>(null);
+    const [isScrolled, setIsScrolled] = useState(false);
 
     const handleOutsideClick = (event: MouseEvent) => {
         if (
@@ -64,6 +65,14 @@ export const Navigation: React.FC<NavigationProps> = ({ navigation, categories, 
         };
     }, []);
 
+    useEffect(() => {
+        const handleScroll = () => {
+            setIsScrolled(window.scrollY > 50);
+        };
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
     // THIS SHOULD COME FROM PLUGIN
     const entries = [
         { text: t('announcements-bar')[0], href: '/collections/all' },
@@ -75,16 +84,18 @@ export const Navigation: React.FC<NavigationProps> = ({ navigation, categories, 
     return (
         <>
             <AnnouncementBar entries={entries} secondsBetween={5} />
-            <StickyContainer>
+            <StickyContainer scrolled={isScrolled}>
                 <ContentContainer>
                     <Stack itemsCenter justifyBetween gap="5rem" w100>
                         <Stack itemsCenter>
                             <Link ariaLabel={'Home'} href={'/'}>
-                                <LogoAexol width={60} />
+                                <div style={{ maxWidth: '120px', flexShrink: 0 }}>
+                                    <LogoProMerchants width={120} className='' />
+                                </div>
                             </Link>
                         </Stack>
                         <AnimatePresence>
-                            {navigationSearch.searchOpen ? (
+                            {navigationSearch.searchOpen ? ( 
                                 <DesktopNavigationContainer
                                     style={{ width: '100%' }}
                                     initial={{ opacity: 0 }}
@@ -123,14 +134,14 @@ export const Navigation: React.FC<NavigationProps> = ({ navigation, categories, 
     );
 };
 
-const StickyContainer = styled.nav`
+const StickyContainer = styled.nav<{ scrolled?: boolean }>`
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-
     width: 100%;
-    padding: 2rem;
+    padding: ${p => p.scrolled ? '1rem' : '2rem'};
+    transition: padding 0.3s ease;
     position: sticky;
     top: 0;
     background: ${p => p.theme.gray(0)};

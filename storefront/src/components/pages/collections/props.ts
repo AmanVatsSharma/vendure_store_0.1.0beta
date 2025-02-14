@@ -51,7 +51,6 @@ export const getStaticProps = async (context: ContextModel<{ slug?: string[] }>)
         collection,
         navigation,
     };
-
     return {
         props: returnedStuff,
         revalidate: process.env.NEXT_REVALIDATE ? parseInt(process.env.NEXT_REVALIDATE) : 10,

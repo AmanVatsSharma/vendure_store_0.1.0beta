@@ -71,9 +71,9 @@ export const Footer: React.FC<{
                 </ContentContainer>
             </LawsWrapper>
             <LinkBar>
-                <Link href="https://aexol.com/" external>
+                <Link href="https://ProMerchants.com/" external>
                     <p>
-                        Made by <strong>Aexol</strong>
+                        Made by <strong>ProMerchants</strong>
                     </p>
                 </Link>
             </LinkBar>

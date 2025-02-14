@@ -21,21 +21,21 @@ export const CustomHelmet: React.FC<{
         title = pageTitle.slice(0, 60 - 3) + '...';
         // console.log(`title of ${asPath} is too long`);
     }
-    const u = new URL((process.env.NEXT_PUBLIC_DOMAIN || 'https://shop.aexol.com') + asPath);
+    const u = new URL((process.env.NEXT_PUBLIC_DOMAIN || 'https://shop.ProMerchants.com') + asPath);
     const canonicalUrl = u.origin + u.pathname;
 
-    let metaDescription = product?.description || collection?.description || 'Demo store made by Aexol';
+    let metaDescription = product?.description || collection?.description || 'Demo store made by ProMerchants';
     if (metaDescription.length > 160) {
         metaDescription = metaDescription.slice(0, 160 - 3) + '...';
         // console.log(`description of ${asPath} is too long`);
     }
 
     const seo = {
-        name: 'Aexol Demo Store',
+        name: 'ProMerchants Demo Store',
         description: metaDescription,
         pageUrl: `${asPath}`,
         keywords: [
-            'Aexol',
+            'ProMerchants',
             'Shop',
             'E-commerce',
             'React',
@@ -48,10 +48,10 @@ export const CustomHelmet: React.FC<{
             product?.name as string,
         ],
         faviconUrl: `/favicon.ico`,
-        logo: `/images/aexol_full_logo.png`,
-        facebook: 'https://www.facebook.com/Aexol',
-        twitter: 'https://twitter.com/aexol',
-        image: product?.featuredAsset?.preview || collection?.featuredAsset?.preview || `/images/aexol_full_logo.png`,
+        logo: `/images/ProMerchants_full_logo.png`,
+        facebook: 'https://www.facebook.com/ProMerchants',
+        twitter: 'https://twitter.com/ProMerchants',
+        image: product?.featuredAsset?.preview || collection?.featuredAsset?.preview || `/images/ProMerchants_full_logo.png`,
     };
     // !seo.keywords.some(keyword => title.includes(keyword)) && console.log(`no keyword in title of ${seo.pageUrl}`);
     // !seo.keywords.some(keyword => seo.description.includes(keyword)) &&
@@ -135,13 +135,13 @@ const doStoreLD = () => {
     return {
         '@context': 'https://schema.org/',
         '@type': 'OnlineStore',
-        name: 'Aexol demo shop',
-        description: 'Aexol demo shop is for demonstration purposes, change des to fit your usecase',
-        image: '/images/aexol_full_logo.png',
+        name: 'ProMerchants demo shop',
+        description: 'ProMerchants demo shop is for demonstration purposes, change des to fit your usecase',
+        image: '/images/ProMerchants_full_logo.png',
         parentOrganization: {
             '@type': 'OnlineBusiness',
-            name: 'Aexol',
-            url: 'http://aexol.com/',
+            name: 'ProMerchants',
+            url: 'http://ProMerchants.com/',
         },
     };
 };
