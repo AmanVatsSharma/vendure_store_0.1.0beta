@@ -23,7 +23,7 @@ const CollectionItem = styled.div`
   font-size: 1rem;
   color: ${props => props.theme.gray ? props.theme.gray(800) : '#333'};
   &:hover {
-    color: ${props => props.theme.primary || '#f16717'};
+    color: ${props => props.theme.accent || '#f16717'};
   }
 `;
 

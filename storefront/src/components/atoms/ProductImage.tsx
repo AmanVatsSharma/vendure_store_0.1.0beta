@@ -12,19 +12,27 @@ export const ProductImage = forwardRef((props: ImageType, ref: React.ForwardedRe
     return <StyledProductImage {...rest} src={better_src} size={size} ref={ref} />;
 });
 
+type GridImageProps = ImgHTMLAttributes<HTMLImageElement> & { 
+    isLandscape?: boolean;
+};
+
 export const ProductImageGrid = forwardRef(
-    (props: ImgHTMLAttributes<HTMLImageElement>, ref: React.ForwardedRef<HTMLImageElement>) => {
-        const { src, ...rest } = props;
+    (props: GridImageProps, ref: React.ForwardedRef<HTMLImageElement>) => {
+        const { src, isLandscape, ...rest } = props;
         const better_src = optimizeImage({ size: 'popup', src });
-        return <StyledProductImageGrid {...rest} src={better_src} ref={ref} />;
+        return <StyledProductImageGrid {...rest} src={better_src} ref={ref} isLandscape={isLandscape} />;
     },
 );
 
-const StyledProductImageGrid = styled.img`
+const StyledProductImageGrid = styled.img<{ isLandscape?: boolean }>`
     width: 100%;
-    object-fit: cover;
     height: 48rem;
+    object-fit: ${p => (p.isLandscape ? 'cover' : 'contain')};
+    object-position: center;
     flex: 0 0 auto;
+    background-color: ${({ theme }) => theme.imageBackground || '#f1f1f1'};
+    transition: transform 0.3s ease;
+    ${p => p.isLandscape && 'transform: scale(1.05);'}
 `;
 
 export const StyledProductImage = styled.img<{
@@ -50,7 +58,8 @@ export const StyledProductImage = styled.img<{
                 : p.size === 'thumbnail-big'
                   ? '16rem'
                   : '8rem'};
-    object-fit: cover;
+    object-fit: contain;
+    object-position: center;
     flex: 0 0 auto;
     ${({ theme }) => `border-radius: ${theme.borderRadius}`}
 `;

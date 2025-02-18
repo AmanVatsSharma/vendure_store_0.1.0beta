@@ -10,6 +10,10 @@ import type { getStaticProps } from './props';
 import { motion, AnimatePresence } from 'framer-motion';
 import DOMPurify from 'dompurify';
 import FeaturedScrollableProducts from '@/src/components/organisms/FeaturedScrollableProducts';
+import Banner from '@/src/components/molecules/Banner';
+import { BannerData } from '@/src/constants/uiConstants';
+import FullWidthAutoScrollBanner from '@/src/components/molecules/FullWidthAutoScrollBanner';
+import FeaturedProductsByCollection from '@/src/components/molecules/FeaturedProductsByCollection';
 
 const Main = styled(Stack)`
     padding: 0 0 4rem 0;
@@ -128,23 +132,39 @@ export const Home: React.FC<InferGetStaticPropsType<typeof getStaticProps>> = pr
     return (
         <Layout navigation={props.navigation} categories={props.categories} pageTitle={t('seo.home')}>
             <Main w100 column gap="4rem">
+                <ContentContainer>
+                    {BannerData.map((banner, index) => (
+                        <Banner
+                            key={index}
+                            imageUrl={banner.imageUrl}
+                            text={banner.text}
+                            link={banner.link}
+                            alt={banner.alt}
+                        />
+                    ))}
+                </ContentContainer>
+                <FullWidthAutoScrollBanner banners={BannerData} autoScrollInterval={5} />
                 <Hero
                     cta={t('hero-cta')}
                     h1={t('hero-h1')}
                     h2={t('hero-h2')}
                     desc={t('hero-p')}
                     link="/collections/all"
-                    image={
-                        props.products?.find(p => p.slug.includes('laptop'))?.productAsset?.preview ??
-                        (props.products[0]?.productAsset?.preview || '')
-                    }
+                    // image={
+                    //     props.products?.find(p => p.slug.includes('laptop'))?.productAsset?.preview ??
+                    //     (props.products[0]?.productAsset?.preview || '')
+                    // }
+                    image='https://ajaybiotech.com/images/banner-blog-agriculture-mobile.jpg'
                 />
                 <ContentContainer>
                     <HomePageSliders sliders={props.sliders} seeAllText={t('see-all')} />
                 </ContentContainer>
                 {props.sliders && props.sliders.length > 0 && props.sliders[0] && (
                     <ContentContainer>
-                        <FeaturedScrollableProducts collection={props.sliders[0]} />
+                        <FeaturedProductsByCollection 
+                            collectionName={props.sliders[0].name}
+                            products={props.products.filter(p => p.collectionSlug === props.sliders[0].slug)}
+                        />
                     </ContentContainer>
                 )}
                 {props.products && props.products.length > 0 && (
@@ -261,7 +281,7 @@ const ViewButton = styled.button`
 
 const StyledSafeHtml = styled.div`
   font-size: 0.9rem;
-  color: ${({ theme }) => theme.text?.secondary || '#666'};
+  color: ${({ theme }) => theme.text?.subtitle || '#666'};
   margin: 0.5rem 0;
 `;
 

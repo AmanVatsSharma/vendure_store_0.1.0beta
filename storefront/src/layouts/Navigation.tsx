@@ -14,7 +14,7 @@ import { CartDrawer } from '@/src/layouts/CartDrawer';
 import { CollectionTileType, NavigationType } from '@/src/graphql/selectors';
 import { RootNode } from '@/src/util/arrayToTree';
 import { DesktopNavigation } from '@/src/components/organisms/DesktopNavigation';
-import { SearchIcon } from 'lucide-react';
+import { SearchIcon, Menu, X } from 'lucide-react';
 import { IconButton } from '@/src/components/molecules/Button';
 import { AnnouncementBar } from '@/src/components/organisms/AnnouncementBar';
 import { CategoryBar } from './CategoryBar';
@@ -44,6 +44,7 @@ export const Navigation: React.FC<NavigationProps> = ({ navigation, categories, 
     const searchMobileRef = useRef<HTMLDivElement>(null);
     const iconRef = useRef<HTMLButtonElement>(null);
     const [isScrolled, setIsScrolled] = useState(false);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     const handleOutsideClick = (event: MouseEvent) => {
         if (
@@ -89,10 +90,13 @@ export const Navigation: React.FC<NavigationProps> = ({ navigation, categories, 
                     <Stack itemsCenter justifyBetween gap="5rem" w100>
                         <Stack itemsCenter>
                             <Link ariaLabel={'Home'} href={'/'}>
-                                <div style={{ maxWidth: '120px', flexShrink: 0 }}>
-                                    <LogoProMerchants width={120} className='' />
+                                <div style={{ maxWidth: '400px', flexShrink: 0 }}>
+                                    <LogoProMerchants width={400} className='' />
                                 </div>
                             </Link>
+                            <MobileMenuButton onClick={() => setIsMobileMenuOpen(true)} aria-label="Open mobile menu">
+                                <Menu />
+                            </MobileMenuButton>
                         </Stack>
                         <AnimatePresence>
                             {navigationSearch.searchOpen ? ( 
@@ -130,6 +134,26 @@ export const Navigation: React.FC<NavigationProps> = ({ navigation, categories, 
             </StickyContainer>
 
             {categories?.length > 0 ? <CategoryBar collections={categories} /> : null}
+
+            <AnimatePresence>
+                {isMobileMenuOpen && navigation && navigation.children && (
+                    <MobileNavOverlay
+                        initial={{ x: '-100%' }}
+                        animate={{ x: 0 }}
+                        exit={{ x: '-100%' }}
+                        transition={{ duration: 0.3 }}
+                    >
+                        <CloseButton onClick={() => setIsMobileMenuOpen(false)} aria-label="Close mobile menu">
+                            <X />
+                        </CloseButton>
+                        {navigation.children.map((child: any) => (
+                            <MobileNavLink key={child.id} href={`/collections/${child.slug}`}>  
+                                {child.name}
+                            </MobileNavLink>
+                        ))}
+                    </MobileNavOverlay>
+                )}
+            </AnimatePresence>
         </>
     );
 };
@@ -165,5 +189,40 @@ const DesktopNavigationContainer = styled(motion.div)`
     display: none;
     @media (min-width: ${p => p.theme.breakpoints.md}) {
         display: block;
+    }
+`;
+
+const MobileMenuButton = styled(IconButton)`
+    display: none;
+    @media (max-width: ${p => p.theme.breakpoints.md}) {
+        display: block;
+    }
+`;
+
+const MobileNavOverlay = styled(motion.div)`
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    flex-direction: column;
+    padding: 2rem;
+    z-index: 3000;
+`;
+
+const CloseButton = styled(IconButton)`
+    align-self: flex-end;
+    margin-bottom: 2rem;
+`;
+
+const MobileNavLink = styled(Link)`
+    color: #fff;
+    margin: 1rem 0;
+    font-size: 1.5rem;
+    text-decoration: none;
+    &:hover {
+        text-decoration: underline;
     }
 `;
